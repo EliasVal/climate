@@ -1,14 +1,25 @@
 <script lang="ts">
+  import Earth from "./Components/Earth.svelte";
 </script>
 
-<main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
-</main>
+<h1 style="text-align: center; padding-top: 2rem">
+  The Earth is being cooked, while we are in it.
+</h1>
+<div class="shawarma">
+  <Earth />
+</div>
 
 <style lang="scss">
-  @import "./styles/index.scss";
+  @import "../styles/vars.scss";
+
+  .shawarma {
+    width: 50%;
+    border: $borderSize #fa48af solid;
+    height: 250px;
+    border-bottom: none;
+    position: fixed;
+
+    inset: 0;
+    margin: auto;
+  }
 </style>
