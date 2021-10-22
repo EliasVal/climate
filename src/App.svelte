@@ -74,7 +74,7 @@
 </div>
 
 <style lang="scss" global>
-  @import "../styles/vars.scss";
+  @import "./styles/vars.scss";
 
   .shawarma {
     width: 50%;
