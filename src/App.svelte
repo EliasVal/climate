@@ -4,32 +4,56 @@
   import Earth from "./Components/Earth.svelte";
   import { GenRandom } from "./ts/utils";
 
-  const minBubbleSize = 5,
-    maxBubbleSize = 15;
+  const minBubbleSize = 20,
+    maxBubbleSize = 35;
 
   let spawnpoints: HTMLCollectionOf<Element>;
   onMount(() => {
     spawnpoints = document.getElementsByClassName("spawn");
-    console.log(spawnpoints);
     Spawning();
   });
 
-  function Spawning() {
-    let point = spawnpoints[GenRandom(spawnpoints.length)];
+  async function Spawning() {
+    const point = spawnpoints[GenRandom(spawnpoints.length)];
+    const div = document.createElement("div");
+    const size = GenRandom(maxBubbleSize, minBubbleSize);
+    const lifetime = GenRandom(5, 10);
 
-    let div = document.createElement("div");
-
-    div.style.width = `${GenRandom(maxBubbleSize, minBubbleSize)}px`;
-    div.style.height = div.style.width;
+    div.style.height = `${size}px`;
+    div.style.width = div.style.height;
 
     div.style.backgroundColor = "#000";
-    div.style.opacity = div.style.borderRadius = `${GenRandom(80, 30)}%`;
-
-    div.classList.add("smoke");
+    div.style.opacity = `${GenRandom(80, 30) / 100}`;
+    div.style.borderRadius = "50%";
+    div.style.position = "absolute";
 
     point.appendChild(div);
+    FloatDiv(div, 0);
+    setTimeout(async () => {
+      div.style.animation = "fadeOut 2s ease-out forwards";
+      setTimeout(() => {
+        point.removeChild(div);
+      }, 2000);
+    }, lifetime * 1000);
 
-    setTimeout(Spawning, 1000);
+    setTimeout(Spawning, 20);
+  }
+
+  async function FloatDiv(
+    div: HTMLDivElement,
+    ypos,
+    size = 0,
+    desxpos = 0,
+    xpos = 0
+  ) {
+    ypos++;
+    if (size < 1) size += 0.01;
+
+    if (desxpos == ~~xpos) desxpos = GenRandom(10, -10);
+    xpos += desxpos < xpos ? -0.3 : 0.3;
+
+    div.style.transform = `translateY(${-ypos}px) translateX(${xpos}px) scale(${size})`;
+    setTimeout(async () => FloatDiv(div, ypos, size, desxpos, xpos), 20);
   }
 </script>
 
@@ -49,7 +73,7 @@
   </div>
 </div>
 
-<style lang="scss">
+<style lang="scss" global>
   @import "../styles/vars.scss";
 
   .shawarma {
@@ -83,7 +107,9 @@
     }
   }
 
-  :global(.smoke) {
-    animation: grow 0.5s linear forwards;
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+    }
   }
 </style>
