@@ -2,16 +2,34 @@
   import { onMount } from "svelte";
 
   import Earth from "./Components/Earth.svelte";
+  import F1 from "./Components/Factories/F1.svelte";
   import ProgressBar from "./Components/ProgressBar.svelte";
   import { GenRandom } from "./ts/utils";
 
   const minBubbleSize = 20,
     maxBubbleSize = 35;
 
-  let spawnpoints: HTMLCollectionOf<Element>;
+  let spawnpoints: Array<{
+    spawn: HTMLElement;
+    creator: HTMLElement | Element;
+  }> = [];
+
   onMount(() => {
-    spawnpoints = document.getElementsByClassName("spawn");
+    const cSpawns = document.getElementsByClassName("createSpawn");
+    for (const spawn of cSpawns) {
+      const span = document.createElement("span");
+      span.style.position = "absolute";
+      span.style.left =
+        window.pageXOffset + spawn.getBoundingClientRect().left - 10 + "px";
+      span.style.top =
+        window.pageYOffset + spawn.getBoundingClientRect().top + "px";
+
+      span.classList.add("spawn");
+      spawnpoints.push({ spawn: span, creator: spawn });
+      document.querySelector("main").appendChild(span);
+    }
     Spawning();
+    console.log(spawnpoints);
   });
 
   async function Spawning() {
@@ -22,13 +40,15 @@
 
     div.style.height = `${size}px`;
     div.style.width = div.style.height;
+    div.style.zIndex = GenRandom(3).toString();
 
     let color = "#";
-    if (point.hasAttribute("color")) color = point.getAttribute("color");
+    if (point.spawn.hasAttribute("color"))
+      color = point.spawn.getAttribute("color");
     // If two colors were provided
-    else if (point.hasAttribute("colors")) {
+    else if (point.spawn.hasAttribute("colors")) {
       // split colors provided into array
-      const colors = point
+      const colors = point.spawn
         .getAttribute("colors")
         .split(/\s*;\s*/)
         .slice(0, 2);
@@ -67,12 +87,12 @@
     div.style.borderRadius = "50%";
     div.style.position = "absolute";
 
-    point.appendChild(div);
+    point.spawn.appendChild(div);
     FloatDiv(div, 0);
     setTimeout(async () => {
       div.style.animation = "fadeOut 2s ease-out forwards";
       setTimeout(() => {
-        point.removeChild(div);
+        point.spawn.removeChild(div);
       }, 2000);
     }, lifetime * 1000);
 
@@ -101,6 +121,19 @@
     document.getElementById("sticks").style.top = `${
       document.getElementById("earth").clientHeight / 2
     }px`;
+
+    for (let i = 0; i < spawnpoints.length; i++) {
+      spawnpoints[i].spawn.style.left =
+        window.pageXOffset +
+        spawnpoints[i].creator.getBoundingClientRect().x -
+        10 +
+        "px";
+
+      spawnpoints[i].spawn.style.top =
+        window.pageYOffset +
+        spawnpoints[i].creator.getBoundingClientRect().top +
+        "px";
+    }
   }
 </script>
 
@@ -120,13 +153,7 @@
     <Earth />
 
     <div class="factoryContainer">
-      <div class="spawnpoints">
-        <span class="spawn" />
-        <span class="spawn" />
-        <span class="spawn" />
-        <span class="spawn" />
-        <span class="spawn" />
-      </div>
+      <F1 />
     </div>
   </div>
   <ProgressBar />
@@ -134,17 +161,26 @@
 
 <style lang="scss" global>
   @import "./styles/vars.scss";
-
+  svg {
+    z-index: 3;
+    width: 15rem;
+  }
   .shawarma {
     width: 50%;
     margin: auto;
     position: relative;
   }
 
+  .factoryContainer {
+    margin: 50px auto 0 auto;
+    width: fit-content;
+  }
+
   .sticks {
     position: absolute;
     width: 100%;
     bottom: 25%;
+    bottom: 0;
     display: flex;
     flex-direction: column;
 
@@ -153,6 +189,7 @@
       transform: scaleX(1.2);
       height: 5px;
     }
+
     .sides {
       height: 100%;
       display: flex;
@@ -166,17 +203,6 @@
         width: 5px;
         height: 100%;
         transform: scale(1.1);
-      }
-    }
-  }
-
-  .factoryContainer {
-    margin-top: calc(#{$earthSize} - 50px);
-    .spawnpoints {
-      display: flex;
-      justify-content: space-between;
-      .spawn {
-        width: 1px;
       }
     }
   }

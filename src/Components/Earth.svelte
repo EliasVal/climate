@@ -13,7 +13,8 @@
     /* CENTER EARTH */
     margin: 0 auto;
 
-    z-index: 10;
+    z-index: 1;
+    position: relative;
 
     box-sizing: border-box;
     /* FOR SOME REASON CSS FORGETS THAT I DO OVERFLOW HIDDEN 
