@@ -11,6 +11,12 @@
   function calcPercentage() {
     percentage = Math.abs(Date.now() - startDate.getTime()) * diff;
   }
+
+  let v = 0;
+  setInterval(() => {
+    document.documentElement.style.setProperty("--offset", `${v}px`);
+    v += 0.2;
+  }, 1);
 </script>
 
 <div class="main">
@@ -31,6 +37,10 @@
 </div>
 
 <style lang="scss">
+  :root {
+    --offset: 0px;
+  }
+
   .main {
     padding: 2rem 0;
     max-width: 1100px;
@@ -47,13 +57,37 @@
     box-sizing: border-box;
     border: 5px #000 solid;
     background-color: black;
+
     .progressBg {
       background-color: white;
+      position: relative;
       border-radius: 5px;
+
       .progressBar {
         border-radius: 5px;
         position: relative;
+        z-index: 1;
       }
+    }
+  }
+
+  .progressBar::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-image: url(/images/loadingLine.svg);
+    background-repeat: repeat-x;
+    background-position-x: var(--offset);
+    opacity: 0.2;
+    z-index: 0;
+  }
+
+  @media only screen and (max-width: 1150px) {
+    .main {
+      width: auto;
     }
   }
 </style>

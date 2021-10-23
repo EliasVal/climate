@@ -3,6 +3,7 @@
 
   import Earth from "./Components/Earth.svelte";
   import F1 from "./Components/Factories/F1.svelte";
+  import F2 from "./Components/Factories/F2.svelte";
   import ProgressBar from "./Components/ProgressBar.svelte";
   import { GenRandom } from "./ts/utils";
 
@@ -36,7 +37,8 @@
     const point = spawnpoints[GenRandom(spawnpoints.length)];
     const div = document.createElement("span");
     const size = GenRandom(maxBubbleSize, minBubbleSize);
-    const lifetime = GenRandom(5, 10);
+    const lifetime =
+      window.innerWidth > 615 ? GenRandom(5, 10) : GenRandom(3, 5);
 
     div.style.height = `${size}px`;
     div.style.width = div.style.height;
@@ -96,7 +98,7 @@
       }, 2000);
     }, lifetime * 1000);
 
-    setTimeout(Spawning, 20);
+    setTimeout(Spawning, 50);
   }
 
   async function FloatDiv(
@@ -138,7 +140,7 @@
 </script>
 
 <svelte:window on:resize={res} />
-<main style="height: 100vh; display: flex; flex-direction: column">
+<main style="height: 100vh; display: flex; flex-direction: column; gap: 5rem;">
   <h1 style="text-align: center; padding-top: 2rem">
     The Earth is being cooked, while we are in it.
   </h1>
@@ -153,7 +155,12 @@
     <Earth />
 
     <div class="factoryContainer">
-      <F1 />
+      <div style="left: 50%; transform: translateX(-60%);">
+        <F1 />
+      </div>
+      <div style="left: 50%; transform: translateX(-10%);">
+        <F2 />
+      </div>
     </div>
   </div>
   <ProgressBar />
@@ -161,19 +168,24 @@
 
 <style lang="scss" global>
   @import "./styles/vars.scss";
-  svg {
-    z-index: 3;
-    width: 15rem;
-  }
   .shawarma {
     width: 50%;
     margin: auto;
     position: relative;
   }
-
+  svg {
+    width: 15rem;
+  }
   .factoryContainer {
-    margin: 50px auto 0 auto;
-    width: fit-content;
+    z-index: 3;
+    margin: 50px 0 0 0;
+    width: 100%;
+    position: relative;
+    height: 15rem;
+    div {
+      position: absolute;
+      bottom: 0;
+    }
   }
 
   .sticks {
@@ -225,6 +237,9 @@
   @media only screen and (max-width: 1024px) {
     .shawarma {
       width: 75%;
+    }
+    svg {
+      width: 10rem;
     }
   }
 
