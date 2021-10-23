@@ -1,6 +1,6 @@
 <script>
   // The data/time we want to countdown to
-  const destDate = new Date("Jul 21, 2029").getTime();
+  const endDate = new Date("Jul 21, 2029").getTime();
 
   let years = 0;
   let days = 0;
@@ -12,8 +12,7 @@
   setInterval(CalcTime, 1000);
 
   function CalcTime() {
-    let now = new Date().getTime();
-    let timeleft = destDate - now;
+    let timeleft = endDate - Date.now();
 
     // Calculating the days, hours, minutes and seconds left
     seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
@@ -37,5 +36,9 @@
 <style lang="scss">
   .timeName {
     font-size: medium;
+  }
+
+  div h1 {
+    display: inline;
   }
 </style>

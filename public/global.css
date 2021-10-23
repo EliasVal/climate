@@ -9,5 +9,5 @@
 html,
 body {
   height: 100%;
-  background: linear-gradient(30deg, #b61616, #cf910b 45%);
+  background: linear-gradient(30deg, #b61616, #cf910b 45%) fixed;
 }

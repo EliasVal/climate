@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   import Earth from "./Components/Earth.svelte";
-  import Timer from "./Components/Timer.svelte";
+  import ProgressBar from "./Components/ProgressBar.svelte";
   import { GenRandom } from "./ts/utils";
 
   const minBubbleSize = 20,
@@ -16,14 +16,53 @@
 
   async function Spawning() {
     const point = spawnpoints[GenRandom(spawnpoints.length)];
-    const div = document.createElement("div");
+    const div = document.createElement("span");
     const size = GenRandom(maxBubbleSize, minBubbleSize);
     const lifetime = GenRandom(5, 10);
 
     div.style.height = `${size}px`;
     div.style.width = div.style.height;
 
-    div.style.backgroundColor = "#000";
+    let color = "#";
+    if (point.hasAttribute("color")) color = point.getAttribute("color");
+    // If two colors were provided
+    else if (point.hasAttribute("colors")) {
+      // split colors provided into array
+      const colors = point
+        .getAttribute("colors")
+        .split(/\s*;\s*/)
+        .slice(0, 2);
+      console.log(colors);
+
+      const color1Vals = [];
+      const color2Vals = [];
+
+      // convert each set of 2 Hex numbers to Ints
+      colors[0]
+        .replace("#", "")
+        .match(/.{1,2}/g)
+        .map((v) => {
+          color1Vals.push(parseInt(v, 16));
+        });
+
+      colors[1]
+        .replace("#", "")
+        .match(/.{1,2}/g)
+        .map((v) => {
+          color2Vals.push(parseInt(v, 16));
+        });
+
+      // Iterate through each number and generate one between them.
+      color1Vals.map((v, i) => {
+        let gNum;
+        if (v < color2Vals[i]) gNum = GenRandom(color2Vals[i], v);
+        else if (v > color2Vals[i]) gNum = GenRandom(v, color2Vals[i]);
+        else gNum = v;
+        color += gNum.toString(16);
+      });
+    } else color = "#000";
+
+    div.style.backgroundColor = color;
     div.style.opacity = `${GenRandom(80, 30) / 100}`;
     div.style.borderRadius = "50%";
     div.style.position = "absolute";
@@ -41,7 +80,7 @@
   }
 
   async function FloatDiv(
-    div: HTMLDivElement,
+    div: HTMLSpanElement,
     ypos,
     size = 0,
     desxpos = 0,
@@ -90,7 +129,7 @@
       </div>
     </div>
   </div>
-  <Timer />
+  <ProgressBar />
 </main>
 
 <style lang="scss" global>
@@ -98,10 +137,6 @@
 
   .shawarma {
     width: 50%;
-    // border: $borderSize #fa48af solid;
-    // height: 250px;
-    // border-bottom: none;
-    // inset: 0;
     margin: auto;
     position: relative;
   }
@@ -130,6 +165,7 @@
       #l {
         width: 5px;
         height: 100%;
+        transform: scale(1.1);
       }
     }
   }
@@ -164,5 +200,10 @@
     .shawarma {
       width: 75%;
     }
+  }
+
+  img,
+  .unselectalble {
+    user-select: none;
   }
 </style>
