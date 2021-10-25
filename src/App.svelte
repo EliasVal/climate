@@ -4,6 +4,7 @@
   import Earth from "./Components/Earth.svelte";
   import F1 from "./Components/Factories/F1.svelte";
   import F2 from "./Components/Factories/F2.svelte";
+  import F3 from "./Components/Factories/F3.svelte";
   import ProgressBar from "./Components/ProgressBar.svelte";
   import { GenRandom } from "./ts/utils";
 
@@ -30,7 +31,6 @@
       document.querySelector("main").appendChild(span);
     }
     Spawning();
-    console.log(spawnpoints);
   });
 
   async function Spawning() {
@@ -155,11 +155,14 @@
     <Earth />
 
     <div class="factoryContainer">
-      <div style="left: 50%; transform: translateX(-60%);">
-        <F1 />
+      <div style="left: 50%; transform: translateX(-75%);">
+        <F3 />
       </div>
       <div style="left: 50%; transform: translateX(-10%);">
         <F2 />
+      </div>
+      <div style="left: 50%; transform: translateX(-50%);">
+        <F1 />
       </div>
     </div>
   </div>
