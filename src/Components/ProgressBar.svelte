@@ -14,7 +14,7 @@
 
   let v = 0;
   setInterval(() => {
-    // document.documentElement.style.setProperty("--offset", `${v}px`);
+    document.documentElement.style.setProperty("--offset", `${v}px`);
     v += 0.2;
   }, 1);
 </script>
@@ -78,7 +78,7 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
-    background-image: url(/images/loadingLine.svg);
+    background-image: url(./images/loadingLine.svg);
     background-repeat: repeat-x;
     background-position-x: var(--offset);
     opacity: 0.2;

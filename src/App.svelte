@@ -31,7 +31,7 @@
       spawnpoints.push({ spawn: span, creator: spawn });
       document.querySelector("main").appendChild(span);
     }
-    // Spawning();
+    Spawning();
   });
 
   async function Spawning() {
