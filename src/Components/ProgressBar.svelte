@@ -78,7 +78,7 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
-    background-image: url(./images/loadingLine.svg);
+    background-image: url(../images/loadingLine.svg);
     background-repeat: repeat-x;
     background-position-x: var(--offset);
     opacity: 0.2;
