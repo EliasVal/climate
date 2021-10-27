@@ -15,11 +15,9 @@
 
     z-index: 1;
     position: relative;
-
+    mask-image: -webkit-radial-gradient(white, black);
     box-sizing: border-box;
-    /* FOR SOME REASON CSS FORGETS THAT I DO OVERFLOW HIDDEN 
-      WHEN ROTATING 90DEG SO I GOTTA ROTATE IT BY 90.00001DEG */
-    transform: rotateZ(90.00001deg);
+    transform: rotateZ(90deg);
 
     overflow: hidden;
 

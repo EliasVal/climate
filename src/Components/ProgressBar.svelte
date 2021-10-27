@@ -14,7 +14,7 @@
 
   let v = 0;
   setInterval(() => {
-    document.documentElement.style.setProperty("--offset", `${v}px`);
+    // document.documentElement.style.setProperty("--offset", `${v}px`);
     v += 0.2;
   }, 1);
 </script>
@@ -88,6 +88,7 @@
   @media only screen and (max-width: 1150px) {
     .main {
       width: auto;
+      margin: 0 30px;
     }
   }
 </style>

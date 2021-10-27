@@ -6,6 +6,7 @@
   import F2 from "./Components/Factories/F2.svelte";
   import F3 from "./Components/Factories/F3.svelte";
   import ProgressBar from "./Components/ProgressBar.svelte";
+  import StickSide from "./Components/Stick-Side.svelte";
   import { GenRandom } from "./ts/utils";
 
   const minBubbleSize = 20,
@@ -30,7 +31,7 @@
       spawnpoints.push({ spawn: span, creator: spawn });
       document.querySelector("main").appendChild(span);
     }
-    Spawning();
+    // Spawning();
   });
 
   async function Spawning() {
@@ -123,7 +124,6 @@
     document.getElementById("sticks").style.top = `${
       document.getElementById("earth").clientHeight / 2
     }px`;
-
     for (let i = 0; i < spawnpoints.length; i++) {
       spawnpoints[i].spawn.style.left =
         window.pageXOffset +
@@ -140,16 +140,18 @@
 </script>
 
 <svelte:window on:resize={res} />
+<svelte:body on:scroll={res} />
 <main style="height: 100vh; display: flex; flex-direction: column; gap: 5rem;">
-  <h1 style="text-align: center; padding-top: 2rem">
-    The Earth is being cooked, while we are in it.
-  </h1>
   <div class="shawarma">
     <div class="sticks" id="sticks">
-      <img src="./images/stick-t.png" id="t" alt="" />
+      <img src="./images/stick-t.svg" id="t" alt="" />
       <div class="sides">
-        <img src="./images/stick.png" id="l" alt="" />
-        <img src="./images/stick.png" id="r" alt="" />
+        <div class="stick">
+          <StickSide />
+        </div>
+        <div class="stick">
+          <StickSide />
+        </div>
       </div>
     </div>
     <Earth />
@@ -173,18 +175,20 @@
   @import "./styles/vars.scss";
   .shawarma {
     width: 50%;
-    margin: auto;
+    margin: 20px auto 0 auto;
     position: relative;
   }
-  svg {
-    width: 15rem;
-  }
+
   .factoryContainer {
     z-index: 3;
-    margin: 50px 0 0 0;
+    margin: 60px 0 0 0;
     width: 100%;
     position: relative;
-    height: 15rem;
+    height: 13rem;
+
+    svg {
+      width: 15rem;
+    }
     div {
       position: absolute;
       bottom: 0;
@@ -202,22 +206,29 @@
     #t {
       width: 100%;
       transform: scaleX(1.2);
-      height: 5px;
+      z-index: 1;
     }
 
     .sides {
       height: 100%;
+      width: 110%;
       display: flex;
       justify-content: space-between;
-      #r {
-        right: 0;
-      }
+      position: absolute;
+      top: -5%;
+      left: -5%;
 
-      #r,
-      #l {
-        width: 5px;
-        height: 100%;
-        transform: scale(1.1);
+      .stick {
+        position: relative;
+        .stick-main {
+          z-index: 2;
+          position: relative;
+        }
+        .stick-part {
+          z-index: 0;
+          position: absolute;
+          top: 0;
+        }
       }
     }
   }
@@ -241,8 +252,8 @@
     .shawarma {
       width: 75%;
     }
-    svg {
-      width: 10rem;
+    .factoryContainer svg {
+      width: 8rem;
     }
   }
 
